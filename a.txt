@@ -1,0 +1,354 @@
+Lab 1: Introduction to Linux Environment, CLI, File & Directory Management
+
+Learning Outcomes
+- Log in and log out of Linux.
+- Understand the Linux file system and directory hierarchy.
+- Navigate and manipulate files and directories.
+- Know the root directory, home directory, and paths.
+
+Operating System
+An operating system is a type of system software and a collection of programs that:
+1. Provides a user interface to interact with the machine.
+2. Manages computer resources and coordinates hardware communication.
+Examples: Windows, Linux, DOS.
+
+Linux System Components
+- Shell: Interface between user and Linux; interprets commands.
+- Kernel: Core component handling system calls, process management, scheduling, signals, paging, swapping, file systems, and I/O.
+
+Files
+Files store information.
+File permissions:
+- r: Read
+- w: Write
+- x: Execute
+File operations: create, delete, open, close, read, write, rename, get/set attributes.
+
+Directories
+A directory is a folder where files are stored.
+Directory operations: create, delete, open, close, read, write, rename, get/set attributes.
+
+Linux File System Hierarchy
+/home: Users’ home directories
+/etc: Configuration and system files
+/bin: Core system commands
+/dev: Device files
+/lib: Standard libraries
+/root: Root user’s home directory
+/usr/bin: Common programs
+/usr/doc: Documentation
+/usr/games: Games
+/usr/include: Header files
+/usr/man: Manual pages
+
+File and Directory Commands
+cd / → Go to root directory
+cd or cd ~ → Go to home directory
+. → Current directory
+.. → Parent directory
+sudo su → Switch to root user
+Prompt: $ for normal user, # for root
+
+Common Commands
+pwd → Show current directory
+mkdir name → Create directory
+rmdir name → Remove directory
+cd → Change directory
+rm → Remove file
+clear → Clear screen
+exit → Exit shell
+ls → List files
+ls -a → Show all files (including hidden)
+ls -l → Detailed list
+ls -r → Reverse order
+
+Pathnames
+Absolute Path: Starts from /, e.g., /home/user/scripts/test.sh
+Relative Path: Based on current directory, e.g., user/scripts/test.sh
+
+Lab 2: File and Directory Management
+
+Learning Objectives
+- Set permissions for files/directories (Read, Write, Execute).
+- Manage permissions for owner, group, others.
+- List system users and their IDs.
+- Use manual pages (man).
+- Use wildcards.
+
+Commands
+date → Show date/time
+date +"%d" → Show date
+date +"%r" → Show time
+date +"%Y" → Show year
+clear → Clear screen
+echo → Print message
+sort file → Sort contents of a file
+sort -f → Ignore case
+sort -r → Reverse order
+wc file → Show line, word, character count
+-l: lines, -w: words, -c: characters
+who → Show logged-in users
+whoami → Show current user
+head file → First 10 lines
+tail file → Last 10 lines
+
+File and Directory Security
+User categories: owner, group, others.
+Permissions:
+Permission | File Meaning | Directory Meaning
+Read (r) | View file | List files (ls)
+Write (w) | Modify file | Add/remove files
+Execute (x) | Run file | Enter directory (cd)
+
+Change Permissions (chmod)
+Syntax: chmod [user][+/-/=][permission] file
+User types: u (owner), g (group), o (others), a (all)
+Examples:
+chmod u-w file → Remove write from owner
+chmod go+r file → Add read to group/others
+chmod g=rx file → Set group to read/execute
+
+Wildcards
+* → Match any number of characters
+? → Match a single character
+[ ] → Match specific characters/ranges
+Examples:
+ls t* → Files starting with t
+ls ?t → Two-character files ending with t
+ls [a-c]* → Files starting with a, b, or c
+
+I/O Redirection & Piping
+Redirect output/input between commands and files.
+> → Output to file
+< → Input from file
+| → Pipe output as input to another command
+Example: ls | grep "data"
+
+grep (Global Regular Expression Parser)
+Search for patterns in files.
+grep [options] pattern file
+Options:
+-c: Count matches
+-i: Ignore case
+-n: Show line numbers
+-v: Show non-matching lines
+-w: Match whole words
+Difference: Wildcards match filenames; regex matches text patterns.
+
+kill Command
+Terminates a process using its PID.
+kill [pid]
+
+Lab 4: C Programming Introduction
+
+Learning Objectives
+- Introduction to C programming.
+- Compile programs using GCC.
+- Understand compilation process.
+- Command line arguments & error handling.
+- Structures in C.
+
+C vs C++
+Feature | C | C++
+Paradigm | Procedural | Multi-paradigm
+Objects/Classes | Not supported | Supported
+Encapsulation | Limited (structs) | Strong (classes)
+Memory Management | malloc/free | Constructors/destructors
+
+Compiler Installation
+sudo apt-get update
+sudo apt-get install build-essential
+
+Compile & Run
+gcc file.c -o file
+./file
+
+Example
+#include <stdio.h>
+int main() {
+    printf("One OS to Rule Them All!\n");
+    return 0;
+}
+
+Compilation Stages
+1. Preprocessing: gcc -E file.c -o file.i
+2. Compilation: gcc -S file.i
+3. Assembly: gcc -c file.s
+4. Linking: gcc file.o -o file
+
+Input/Output
+scanf() → Input
+printf() → Output
+Format specifiers: %d, %f, %c, %lf, etc.
+
+Command Line Arguments
+int main(int argc, char *argv[])
+Example:
+./program test.txt → argv[0] = ./program, argv[1] = test.txt
+
+Error Handling
+errno, perror(), strerror()
+
+Structures & Typedef
+Simplify complex data types for readability.
+
+Lab 5: Input-Output System Calls in C
+
+Learning Objectives
+- Use open(), read(), write(), and close() system calls.
+
+System Calls
+Interface for programs to request OS services.
+
+open()
+#include <fcntl.h>
+int fd = open("file.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+
+close()
+close(fd);
+
+write()
+write(fd, buffer, size);
+
+Example
+#include <stdio.h>
+#include <fcntl.h>
+#include <errno.h>
+int main() {
+    int fd = open("foo.txt", O_RDONLY | O_CREAT);
+    if (fd == -1) {
+        perror("Program");
+    }
+    close(fd);
+    return 0;
+}
+
+Tasks
+1. Copy file contents using system calls.
+2. Read/write files using both system calls and fprintf.
+3. Count lines, words, chars using both methods.
+4. Process 10,000-row dataset and find min, max, median (with strtok()).
+
+Lab 6: Process Management System Calls
+
+Outcomes
+- Create child processes.
+- Use fork(), wait(), exec() system calls.
+
+fork()
+Creates a child process.
+Returns:
+<0: Error
+0: Child
+>0: Parent (child PID)
+
+Example
+int main() {
+    fork();
+    printf("Called fork()\n");
+    return 0;
+}
+
+wait()
+Parent waits for child process to finish.
+
+waitpid()
+Waits for a specific child.
+Options: 0, WNOHANG
+
+exec() Family
+Replaces current process with a new program.
+execl, execlp, execv, execvp
+
+Tasks
+1. Child calculates factorial; parent waits.
+2. Execute date using execvp().
+3. Program creating multiple children printing random numbers.
+
+C Program Example – Ten Thousand Rows Challenge
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <float.h>
+
+#define MAX_LINE_LENGTH 100
+#define MAX_STATIONS 100
+#define FILENAME "weather_stations_ttrc.csv"
+
+typedef struct {
+    char name[50];
+    float min_temp;
+    float max_temp;
+    float *all_temps;
+    int count;
+    int capacity;
+} WeatherStation;
+
+int compare_floats(const void *a, const void *b) {
+    float fa = *(const float*)a;
+    float fb = *(const float*)b;
+    return (fa > fb) - (fa < fb);
+}
+
+float calculate_median(float *arr, int count) {
+    if (count == 0) return 0.0;
+    qsort(arr, count, sizeof(float), compare_floats);
+    if (count % 2) return arr[count / 2];
+    return (arr[count/2 - 1] + arr[count/2]) / 2.0;
+}
+
+int find_station(WeatherStation *stations, int num, const char *name) {
+    for (int i = 0; i < num; i++)
+        if (strcmp(stations[i].name, name) == 0) return i;
+    return -1;
+}
+
+void add_reading(WeatherStation *st, float temp) {
+    if (temp < st->min_temp) st->min_temp = temp;
+    if (temp > st->max_temp) st->max_temp = temp;
+    if (st->count >= st->capacity) {
+        st->capacity = st->capacity ? st->capacity * 2 : 10;
+        st->all_temps = realloc(st->all_temps, st->capacity * sizeof(float));
+    }
+    st->all_temps[st->count++] = temp;
+}
+
+void process_file() {
+    FILE *f = fopen(FILENAME, "r");
+    if (!f) { perror("File open error"); return; }
+
+    WeatherStation stations[MAX_STATIONS] = {0};
+    int num = 0;
+    char line[MAX_LINE_LENGTH];
+
+    while (fgets(line, MAX_LINE_LENGTH, f)) {
+        line[strcspn(line, "\n")] = 0;
+        char *name = strtok(line, ";");
+        char *temp_str = strtok(NULL, ";");
+        if (!name || !temp_str) continue;
+        float temp = atof(temp_str);
+
+        int idx = find_station(stations, num, name);
+        if (idx == -1) {
+            idx = num++;
+            strcpy(stations[idx].name, name);
+            stations[idx].min_temp = FLT_MAX;
+            stations[idx].max_temp = FLT_MIN;
+            stations[idx].all_temps = NULL;
+            stations[idx].count = 0;
+            stations[idx].capacity = 0;
+        }
+        add_reading(&stations[idx], temp);
+    }
+    fclose(f);
+
+    printf("Station Name\tMin\tMax\tMedian\n");
+    for (int i = 0; i < num; i++) {
+        float median = calculate_median(stations[i].all_temps, stations[i].count);
+        printf("%-20s %.2f\t%.2f\t%.2f\n", stations[i].name, stations[i].min_temp, stations[i].max_temp, median);
+        free(stations[i].all_temps);
+    }
+}
+
+int main() { process_file(); return 0; }
